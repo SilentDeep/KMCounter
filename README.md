@@ -50,3 +50,9 @@ KMCounter 是一个用于记录和显示键盘和鼠标点击次数的程序，�
 ## 许可证
 
 此项目使用 GNU General Public License v3.0 许可证。详情请参阅 [LICENSE](./LICENSE) 文件。
+
+## Todo List
+有空来填坑：
+- [ ] 屏幕鼠标点击位置热力图
+- [ ] 增加 Windows 键盘
+- [ ] 某些特殊键未计入
