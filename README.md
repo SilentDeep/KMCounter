@@ -7,7 +7,7 @@ KMCounter 是一个用于记录和显示键盘和鼠标点击次数的程序，�
 目前未将程序打包为 app 或 exe，需要使用者有一定 Python 基础。
 
 ## 界面展示
-![界面展示](./assets/PixelSnap%202024-09-27%20at%2022.26.37@2x.png)
+![界面展示](./assets/interface.png)
 
 ## 功能
 
