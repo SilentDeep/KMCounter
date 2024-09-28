@@ -252,7 +252,7 @@
                     const start_time = times.length > 0 ? times[0] : '';
                     const now = new Date();
                     const start_datetime = new Date(start_time);
-                    const twenty_four_h_ago = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+                    const twenty_four_h_ago = new Date(now.getTime() - 16 * 60 * 60 * 1000); // 24 - 8，+8 区
 
                     if (start_datetime < twenty_four_h_ago) {
                         document.getElementById('start-datetime').value = twenty_four_h_ago.toISOString().slice(0, 16);
