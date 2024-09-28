@@ -107,6 +107,8 @@
         }
     </style>
     <script>
+        const color_scheme = ['#ffffff', '#ffffcc', '#ffefa5', '#fede80', '#febf5a', '#fd9e43', '#fd7034', '#f43d25', '#da141e', '#b60026', '#800026'];
+
         document.addEventListener('DOMContentLoaded', (event) => {
             const now = new Date();
             now.setHours(now.getHours() + 8); // 时区
@@ -116,6 +118,7 @@
 
         window.onload = function() {
             fetch_plot_data();
+            generate_heatmap(Array.from({ length: 100 }, () => Array(100).fill(0)), Array.from({ length: 100 }, () => Array(100).fill(0)));
         };
 
         function full_range() {
@@ -156,6 +159,9 @@
                     key_counts_rate = data[1];
                     // console.log(key_counts);
 
+                    screen_hotmap_counts = Array.from({ length: 100 }, () => Array(100).fill(0));
+
+                    // keyboard & mouse
                     Object.keys(key_counts_rate).forEach(key => {
                         const rate = key_counts_rate[key];
                         const count = key_counts[key];
@@ -164,9 +170,6 @@
                         // console.log(key)
                         const element = document.getElementById(key);
                         if (element) {
-                            const colors = [
-                                '#ffffff', '#ffffcc', '#ffefa5', '#fede80', '#febf5a', '#fd9e43', '#fd7034', '#f43d25', '#da141e', '#b60026', '#800026'
-                            ];
                             const interpolateColor = (color1, color2, factor) => {
                                 const hex = (x) => {
                                     x = x.toString(16);
@@ -185,7 +188,7 @@
                             };
                             const index = Math.floor(rate * 10);
                             const factor = (rate * 10) - index;
-                            const color = index < colors.length - 1 ? interpolateColor(colors[index], colors[index + 1], factor) : colors[index];
+                            const color = index < color_scheme.length - 1 ? interpolateColor(color_scheme[index], color_scheme[index + 1], factor) : color_scheme[index];
                             if (key.startsWith('Button.')) {
                                 element.style.fill = color;
                                 element.querySelector('title').textContent = `Count: ${count}`;
@@ -197,10 +200,23 @@
                             
                             // element.style.backgroundColor = '#000' // test
                         }
+                        else if (key.includes('_position_')) { // screen hotmap
+                            const match = key.match(/_position_(\d+)_(\d+)/);
+                            if (match) {
+                                const x = parseInt(match[1], 10);
+                                const y = parseInt(match[2], 10);
+                                screen_hotmap_counts[y][x] = count;
+                            }
+                        }
                         else {
-                            // console.log(key)
+                            console.log(key)
                         }
                     });
+                    const max_value = Math.max(...screen_hotmap_counts.flat());
+                    screen_hotmap_rate = screen_hotmap_counts.map(row => 
+                        row.map(value => Math.log(value + 1) / Math.log(max_value + 1))
+                    );
+                    generate_heatmap(screen_hotmap_counts, screen_hotmap_rate);
                 })
                 .catch(error => console.error('Error:', error));
         }
@@ -221,7 +237,7 @@
                     };
 
                     const layout = {
-                        margin: { t: 20 , b: 30, l: 40, r: 10},
+                        margin: { t: 20 , b: 50, l: 40, r: 10},
                         // title: '',
                         xaxis: { title: 'time' },
                         yaxis: { title: 'count' },
@@ -243,12 +259,48 @@
                     } else {
                         document.getElementById('start-datetime').value = start_time;
                     }
+
+                    check()
                 })
                 .catch(error => console.error('Error:', error));
         }
 
+        function generate_heatmap(screen_hotmap_counts, screen_hotmap_rate) {
+            const heatmapData = [{
+                z: screen_hotmap_rate,
+                zmin: 0,
+                zmax: 1,
+                type: 'heatmap',
+                colorscale: color_scheme.map((color, index) => [index / (color_scheme.length - 1), color]),
+                customdata: screen_hotmap_counts.map((row, i) => row.map((count, j) => ` ${count}<extra>(${i},${j})</extra>`)),
+                hovertemplate: '%{customdata}',
+            }];
+
+            const layout = {
+                margin: { t: 0 , b: 0, l: 0, r: 0},
+                xaxis: { visible: false },
+                yaxis: { visible: false, autorange: 'reversed' },
+                shapes: [{
+                    type: 'rect',
+                    x0: 0,
+                    y0: 0,
+                    x1: 1,
+                    y1: 1,
+                    xref: 'paper',
+                    yref: 'paper',
+                    line: {
+                        color: 'black',
+                        width: 2
+                    }
+                }],
+            };
+
+            Plotly.newPlot('heatmap', heatmapData, layout, { displayModeBar: false });
+        }
+
         function end_program() {
-            alert('尝试结束程序，可尝试刷新网页查看结果');
+            alert('尝试结束程序');
+            location.reload();
             fetch('/end_program', { method: 'POST' })
                 .then(response => {
                     if (!response.ok) {
@@ -260,7 +312,7 @@
     </script>
 </head>
 <body>
-    <button class="button" onclick="end_program();">STOP</button>
+    <button class="button" onclick="end_program();" style="display: block; margin: 0 auto;">STOP</button>
     <h1>Summary</h1>
     <div id="plot" style="width: 100%; height: 400px;"></div>
 
@@ -382,5 +434,8 @@
             <rect id="Button.middle" x="115" y="60" width="20" height="40" rx="10" fill="#e0e0e0" stroke="#000" stroke-width="2"><title></title></path>
         </svg>
     </div>
+
+    <h1>Mouse Click Hotmap</h1>
+    <div id="heatmap" style="width: 80vw; height: 90vh; margin: 20px auto 20px auto;"></div>
 </body>
 </html>

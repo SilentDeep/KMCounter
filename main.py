@@ -5,41 +5,64 @@ import pyautogui
 from utils import *
 from display import run_frontend
 
-settings_file = './settings.json'
-data_file = './data.json'
 settings = {}
 data = {}
 
 def k_on_press(key):
-    if get_time() not in data:
-        data[get_time()] = {}
+    date = get_date()
+    time = get_time()
+    if date not in data:
+        data[date] = {}
+    if time not in data[date]:
+        data[date][time] = {}
     key = str(key).strip("'")
-    if key in data[get_time()]:
-        data[get_time()][key] += 1
+    if key in data[date][time]:
+        data[date][time][key] += 1
     else:
-        data[get_time()][key] = 1
-    save_data(data, data_file)
+        data[date][time][key] = 1
+    save_data(data[date], get_data_path(date))
 
 def m_on_click(x, y, button, pressed):
     if pressed:
-        if get_time() not in data:
-            data[get_time()] = {}
-        screen_width, screen_height = pyautogui.size()
+        date = get_date()
+        time = get_time()
+        if date not in data:
+            data[date] = {}
+        if time not in data[date]:
+            data[date][time] = {}
+            
         name_button = str(button)
+        screen_width, screen_height = pyautogui.size()
         name_position = f'{name_button}_position_{int(x / screen_width * 100)}_{int(y / screen_height * 100)}'
-        if name_button in data[get_time()]:
-            data[get_time()][name_button] += 1
+        
+        if name_button in data[date][time]:
+            data[date][time][name_button] += 1
         else:
-            data[get_time()][name_button] = 1
-        if name_position in data[get_time()]:
-            data[get_time()][name_position] += 1
+            data[date][time][name_button] = 1
+        if name_position in data[date][time]:
+            data[date][time][name_position] += 1
         else:
-            data[get_time()][name_position] = 1
-        save_data(data, data_file)
+            data[date][time][name_position] = 1
+            
+        save_data(data[date], get_data_path(date))
 
 if __name__ == '__main__':
-    data = load_data(data, data_file)
-    backup_data(data, data_file)
+    if not os.path.exists(data_file_dir): # v1.0->v1.1 迁移数据
+        copy_file(data_file, data_file + '.bak') # 备份数据
+        os.mkdir(data_file_dir)
+        data = load_data(os.path.join('.', 'data.json'))
+        new_data = {}
+        for key in data.keys():
+            date = key[0:10]
+            if date not in new_data:
+                new_data[date] = {}
+            new_data[date][key] = data[key]
+        for date in new_data:
+            save_data(new_data[date], get_data_path(date))
+    date = get_date()
+    data[date] = load_data(get_data_path(date))
+    copy_file(get_data_path(date), get_data_path(date) + '.bak') # 备份数据
+    # print('\n\n\ntest\n\n\n')
     # settings = load_settings(settings, settings_file)
     listener_k = keyboard.Listener(on_press=k_on_press)
     listener_k.start()
