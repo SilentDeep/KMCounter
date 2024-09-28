@@ -165,7 +165,7 @@
                     Object.keys(key_counts_rate).forEach(key => {
                         const rate = key_counts_rate[key];
                         const count = key_counts[key];
-                        console.log(key, rate);
+                        // console.log(key, rate);
                         // console.log(count)
                         // console.log(key)
                         const element = document.getElementById(key);
@@ -327,7 +327,11 @@
     <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
         <div class="keyboard">
             <div class="row">
+                {% if os_type == 'Darwin' %}
                 <div class="key wide" id="Key.esc">esc</div>
+                {% else %}
+                <div class="key wide" id="Key.esc">Esc</div>
+                {% endif %}
                 <div class="key" id="Key.f1">F1</div>
                 <div class="key" id="Key.f2">F2</div>
                 <div class="key" id="Key.f3">F3</div>
@@ -340,7 +344,11 @@
                 <div class="key" id="Key.f10">F10</div>
                 <div class="key" id="Key.f11">F11</div>
                 <div class="key" id="Key.f12">F12</div>
+                {% if os_type == 'Darwin' %}
                 <div class="key"></div>
+                {% else %}
+                <div class="key" id="Key.delete">Del</div>
+                {% endif %}
             </div>
             <div class="row">
                 <div class="key" id="`">~<br>·</div>
@@ -370,12 +378,16 @@
                 <div class="key" id="I">I</div>
                 <div class="key" id="O">O</div>
                 <div class="key" id="P">P</div>
-                <div class="key" id="[">[</div>
-                <div class="key" id="]">]</div>
-                <div class="key" id="\\">\</div>
+                <div class="key" id="[">{<br>[</div>
+                <div class="key" id="]">}<br>]</div>
+                <div class="key" id="\\">|<br>\</div>
             </div>
             <div class="row">
+                {% if os_type == 'Darwin' %}
                 <div class="key wide2" id="Key.caps_lock">CN/EN</div>
+                {% else %}
+                <div class="key wide2" id="Key.caps_lock">CapsLock</div>
+                {% endif %}
                 <div class="key" id="A">A</div>
                 <div class="key" id="S">S</div>
                 <div class="key" id="D">D</div>
@@ -385,8 +397,8 @@
                 <div class="key" id="J">J</div>
                 <div class="key" id="K">K</div>
                 <div class="key" id="L">L</div>
-                <div class="key" id=";">;</div>
-                <div class="key" id="'">'</div>
+                <div class="key" id=";">:<br>;</div>
+                <div class="key" id="'">"<br>'</div>
                 <div class="key wide2" id="Key.enter">⏎</div>
             </div>
             <div class="row">
@@ -398,19 +410,31 @@
                 <div class="key" id="B">B</div>
                 <div class="key" id="N">N</div>
                 <div class="key" id="M">M</div>
-                <div class="key" id=",">,</div>
-                <div class="key" id=".">.</div>
-                <div class="key" id="/">/</div>
-                <div class="key shift" id="Key.shift_r">⇧</div>
+                <div class="key" id=","><<br>,</div>
+                <div class="key" id=".">><br>.</div>
+                <div class="key" id="/">?<br>/</div>
+                <div class="key shift" id="Key.shift_r"">⇧</div>
             </div>
             <div class="row">
+                {% if os_type == 'Darwin' %}
                 <div class="key" id="<179>">fn<br>🌐</div>
                 <div class="key" id="Key.ctrl">⌃<br>ctrl</div>
                 <div class="key" id="Key.alt">⌥<br>opt</div>
                 <div class="key cmd" id="Key.cmd">⌘<br>cmd</div>
+                {% else %}
+                <div class="key" id="Key.ctrl_l">Ctrl</div>
+                <div class="key" id="<255>">Fn</div>
+                <div class="key cmd" id="Key.cmd">System</div>
+                <div class="key" id="Key.alt_l">Alt</div>
+                {% endif %}
                 <div class="key space" id="Key.space"></div>
+                {% if os_type == 'Darwin' %}
                 <div class="key cmd" id="Key.cmd_r">⌘<br>cmd</div>
                 <div class="key" id="Key.alt_r">⌥<br>opt</div>
+                {% else %}
+                <div class="key" id="Key.alt_gr">Alt</div>
+                <div class="key cmd" id="Key.ctrl_r">Ctrl</div>
+                {% endif %}
                 <div class="key" id="Key.left">◀</div>
                 <div style="display: flex; flex-direction: column;">
                     <div class="key half-height" id="Key.up">▲</div>

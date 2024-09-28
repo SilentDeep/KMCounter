@@ -47,7 +47,8 @@ def m_on_click(x, y, button, pressed):
         save_data(data[date], get_data_path(date))
 
 if __name__ == '__main__':
-    if not os.path.exists(data_file_dir): # v1.0->v1.1 迁移数据
+    date = get_date()
+    if os.path.exists(data_file) and not os.path.exists(data_file_dir): # v1.0->v1.1 迁移数据
         copy_file(data_file, data_file + '.bak') # 备份数据
         os.mkdir(data_file_dir)
         data = load_data(os.path.join('.', 'data.json'))
@@ -59,9 +60,13 @@ if __name__ == '__main__':
             new_data[date][key] = data[key]
         for date in new_data:
             save_data(new_data[date], get_data_path(date))
-    date = get_date()
     data[date] = load_data(get_data_path(date))
-    copy_file(get_data_path(date), get_data_path(date) + '.bak') # 备份数据
+    if os.path.exists(get_data_path(date)):
+        copy_file(get_data_path(date), get_data_path(date) + '.bak') # 备份数据
+    else:
+        if not os.path.exists(data_file_dir):
+            os.mkdir(data_file_dir)
+        data[date] = {}
     # print('\n\n\ntest\n\n\n')
     # settings = load_settings(settings, settings_file)
     listener_k = keyboard.Listener(on_press=k_on_press)

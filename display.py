@@ -1,7 +1,3 @@
-# import platform
-
-# platform = platform.system()
-
 from flask import Flask, render_template, jsonify, request
 from datetime import datetime
 import math
@@ -36,7 +32,7 @@ def index():
             data.update(load_data(os.path.join(data_file_dir, file)))
             # date = file.split('.')[0]
             # print(date)
-    return render_template('index.html', data=data)
+    return render_template('index.html', data=data, os_type=os_type)
 
 @app.route('/fetch_key_counts', methods=['POST'])
 def fetch_key_counts():
@@ -69,6 +65,7 @@ def fetch_key_counts():
 def fetch_total_key_counts():
     data = fetch_range_data()
     total_key_counts = {time: sum(counts.values()) for time, counts in data.items()}
+    # print(total_key_counts)
     return jsonify(total_key_counts)
 
 @app.route('/end_program', methods=['POST'])

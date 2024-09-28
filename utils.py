@@ -1,10 +1,13 @@
 from datetime import datetime
 from random import choice
+import platform
 import string
 import shutil
 import json
 import os
 
+os_type = platform.system() # Windows, Darwin
+# print(os_type)
 date_format = '%Y-%m-%d'
 time_format = '%Y-%m-%d %H:%M'
 
