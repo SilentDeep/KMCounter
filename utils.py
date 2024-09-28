@@ -11,7 +11,7 @@ os_type = platform.system() # Windows, Darwin
 date_format = '%Y-%m-%d'
 time_format = '%Y-%m-%d %H:%M'
 
-version = '1.1.0'
+version = '1.2.0'
 
 settings_file = os.path.join('.', 'settings.json')
 
