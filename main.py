@@ -67,6 +67,10 @@ if __name__ == '__main__':
         if not os.path.exists(data_file_dir):
             os.mkdir(data_file_dir)
         data[date] = {}
+    for file_name in os.listdir(data_file_dir):
+        if file_name.endswith('.tmp'):
+            # print(os.path.join(data_file_dir, file_name))
+            os.remove(os.path.join(data_file_dir, file_name))
     # print('\n\n\ntest\n\n\n')
     # settings = load_settings(settings, settings_file)
     listener_k = keyboard.Listener(on_press=k_on_press)
