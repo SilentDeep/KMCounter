@@ -1,4 +1,5 @@
 from pynput import keyboard, mouse
+import pyautogui
 # import webbrowser
 
 from utils import *
@@ -23,14 +24,22 @@ def m_on_click(x, y, button, pressed):
     if pressed:
         if get_time() not in data:
             data[get_time()] = {}
-        if str(button) in data[get_time()]:
-            data[get_time()][str(button)] += 1
+        screen_width, screen_height = pyautogui.size()
+        name_button = str(button)
+        name_position = f'{name_button}_position_{int(x / screen_width * 100)}_{int(y / screen_height * 100)}'
+        if name_button in data[get_time()]:
+            data[get_time()][name_button] += 1
         else:
-            data[get_time()][str(button)] = 1
+            data[get_time()][name_button] = 1
+        if name_position in data[get_time()]:
+            data[get_time()][name_position] += 1
+        else:
+            data[get_time()][name_position] = 1
         save_data(data, data_file)
 
 if __name__ == '__main__':
     data = load_data(data, data_file)
+    backup_data(data, data_file)
     # settings = load_settings(settings, settings_file)
     listener_k = keyboard.Listener(on_press=k_on_press)
     listener_k.start()

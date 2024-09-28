@@ -1,2 +1,3 @@
 pynput
 flask
+pyautogui

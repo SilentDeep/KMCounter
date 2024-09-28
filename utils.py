@@ -38,3 +38,9 @@ def load_data(data, data_file):
 def save_data(data, data_file):
     with open(data_file, 'w', encoding='utf-8') as f:
         json.dump(data, f)
+
+def backup_data(data, data_file):
+    if os.path.exists(data_file):
+        with open(data_file, 'r', encoding='utf-8') as input_file:
+            with open(data_file + '.bak', 'w', encoding='utf-8') as output_file:
+                output_file.write(input_file.read())
