@@ -74,7 +74,7 @@ def load_data(data_file):
 # @time_it
 def save_data(data, data_file):
     if os.path.exists(data_file):
-        tmp_data_file = f'{data_file}.{generate_random_string(10)}.tmp' # 避免程序中断，data文件未写完
+        tmp_data_file = f'{data_file}.{generate_random_string(8)}.tmp' # 避免程序中断，data文件未写完
         copy_file(data_file, tmp_data_file)
         with open(tmp_data_file, 'w', encoding='utf-8') as f:
             json.dump(data, f)
@@ -86,5 +86,3 @@ def save_data(data, data_file):
     else:
         with open(data_file, 'w', encoding='utf-8') as f:
             json.dump(data, f)
-
-

@@ -1,6 +1,6 @@
 from pynput import keyboard, mouse
 import pyautogui
-# import webbrowser
+import webbrowser
 
 from utils import *
 from display import run_frontend
@@ -68,5 +68,5 @@ if __name__ == '__main__':
     listener_k.start()
     listener_m = mouse.Listener(on_click=m_on_click)
     listener_m.start()
-    # webbrowser.open('http://127.0.0.1:5000')
+    webbrowser.open('http://127.0.0.1:5000')
     run_frontend()

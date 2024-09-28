@@ -103,7 +103,7 @@
             background-color: #d0d0d0;
         }
         .button:active {
-            transform: translateY(2px); /* 按下效果 */
+            transform: translateY(2px); /* click effect */
         }
     </style>
     <script>
@@ -111,7 +111,7 @@
 
         document.addEventListener('DOMContentLoaded', (event) => {
             const now = new Date();
-            now.setHours(now.getHours() + 8); // 时区
+            now.setHours(now.getHours() + 8); // TZ
             const formattedDate = now.toISOString().slice(0, 16);
             document.getElementById('end-datetime').value = formattedDate;
         });
@@ -132,7 +132,7 @@
                 .catch(error => console.error('Error:', error));
 
             const now = new Date();
-            now.setHours(now.getHours() + 8); // 时区
+            now.setHours(now.getHours() + 8); // TZ
             const formattedDate = now.toISOString().slice(0, 16);
             document.getElementById('end-datetime').value = formattedDate;
         }
@@ -142,7 +142,7 @@
             const endDatetime = document.getElementById('end-datetime').value;
 
             if (new Date(startDatetime) > new Date(endDatetime)) {
-                alert('开始时间不能晚于终止时间');
+                alert('Start Time cannot be after End Time');
                 return;
             }
 
@@ -299,12 +299,12 @@
         }
 
         function end_program() {
-            alert('尝试结束程序');
+            alert('Killing the program...');
             location.reload();
             fetch('/end_program', { method: 'POST' })
                 .then(response => {
                     if (!response.ok) {
-                        alert('结束程序失败');
+                        alert('Failed to kill the program.');
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -375,7 +375,7 @@
                 <div class="key" id="\\">\</div>
             </div>
             <div class="row">
-                <div class="key wide2" id="Key.caps_lock">中/英</div>
+                <div class="key wide2" id="Key.caps_lock">CN/EN</div>
                 <div class="key" id="A">A</div>
                 <div class="key" id="S">S</div>
                 <div class="key" id="D">D</div>
@@ -425,13 +425,13 @@
             <path d="M50 100 Q50 20 125 20 Q200 20 200 100 L200 250 Q200 280 125 280 Q50 280 50 250 Z" fill="#f0f0f0" stroke="#000" stroke-width="5"/>
             
             <!-- Left button -->
-            <path id="Button.left" d="M50 100 Q50 20 125 20 L125 150 L50 150 Z" fill="#f0f0f0" stroke="#000" stroke-width="2"><title></title></path>
+            <path id="Button.left" d="M50 100 Q50 20 125 20 L125 150 L50 150 Z" fill="#f0f0f0" stroke="#000" stroke-width="2" onmousedown="this.setAttribute('transform', 'translate(0, 2)')" onmouseup="this.removeAttribute('transform')"><title></title></path>
             
             <!-- Right button -->
-            <path id="Button.right" d="M125 20 Q200 20 200 100 L200 150 L125 150 Z" fill="#f0f0f0" stroke="#000" stroke-width="2"><title></title></path>
+            <path id="Button.right" d="M125 20 Q200 20 200 100 L200 150 L125 150 Z" fill="#f0f0f0" stroke="#000" stroke-width="2" onmousedown="this.setAttribute('transform', 'translate(0, 2)')" onmouseup="this.removeAttribute('transform')"><title></title></path>
             
             <!-- Scroll wheel -->
-            <rect id="Button.middle" x="115" y="60" width="20" height="40" rx="10" fill="#e0e0e0" stroke="#000" stroke-width="2"><title></title></path>
+            <rect id="Button.middle" x="115" y="60" width="20" height="40" rx="10" fill="#e0e0e0" stroke="#000" stroke-width="2" onmousedown="this.setAttribute('transform', 'translate(0, 2)')" onmouseup="this.removeAttribute('transform')"><title></title></path>
         </svg>
     </div>
 
